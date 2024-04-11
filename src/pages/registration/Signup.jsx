@@ -1,17 +1,44 @@
 /* eslint-disable react/no-unescaped-entities */
 import { Link } from "react-router-dom";
 import authservice from "../../appwrite/Auth";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import toast from 'react-hot-toast'
+import MyContext from "../../context/MyContext";
+import {useNavigate} from "react-router-dom"
 
 const Signup = () => {
+    // const context=useContext(MyContext);
+    // const {loading,setLoading}=context;
+
+    // navigate
+    const navigate=useNavigate();
+
     const [userSignup, setUserSignup] = useState({
         name: "",
         email: "",
-        password: ""
+        password: "",
+        role:"user"
     });
     const event=()=>{
+        if(userSignup.name==""||userSignup.password==""||userSignup.email==""){
+            toast.error("All fiield required to be filled")
+            return ;
+        }
+
+
+        // setLoading(true);
         const b=authservice.CreateAccount(userSignup);
-        console.log(b);
+        if(b){
+            setUserSignup({
+                ...Signup,
+                name:"",
+                email:"",
+                password:""
+            })
+            toast.success("Signup Successful");
+            navigate('/login');
+        }
+        // console.log(b);
     }
 
     return (

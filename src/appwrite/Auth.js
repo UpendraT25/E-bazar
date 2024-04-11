@@ -1,12 +1,14 @@
 import {Client,Account,ID} from "appwrite"
+import conf from "../conf/conf";
+
 export class AuthService{
     client =new Client();
     account;
 
     constructor(){
         this.client
-        .setEndpoint("https://cloud.appwrite.io/v1")
-        .setProject("660aa1a9b34abbc7f70b")
+        .setEndpoint(conf.appwriteUrl)
+        .setProject(conf.appwriteprojid)
         this.account=new Account(this.client);
     }
 
@@ -14,22 +16,9 @@ export class AuthService{
         try{
             const userAccount=await this.account.create(ID.unique(),email,password,name);
             if(userAccount){
-                return userAccount;
+                return true;
             }else {
-                return userAccount;
-            }
-        }catch(error){
-            throw error;
-        }
-    }
-
-    async GetPreference(){
-        try{
-            const getpref=await this.account.getPrefs();
-            if(getpref){
-                return getpref
-            }else{
-                return getpref
+                return false;
             }
         }catch(error){
             throw error;
