@@ -24,6 +24,30 @@ export class AuthService{
             throw error;
         }
     }
+
+    async Login({email,password}){
+        try{
+        const userlogin=await this.account.createEmailSession(email,password);
+        if(userlogin){
+            console.log(userlogin);
+            return userlogin;
+        }else {
+            return userlogin;
+        }
+    }catch(error){
+        console.log("login detail not found");
+    }
+    return null;
+    }
+
+    async getCurrentUser(){
+        try{
+            return this.account.get();
+        }catch(error){
+            console.log("user information not found");
+        }
+        return null;
+    }
 }
 
 const authservice=new AuthService();

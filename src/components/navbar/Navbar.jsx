@@ -1,8 +1,15 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import SearchBar from "../searchBar/SearchBar";
 
 
 const Navbar = () => {
+    const navigate=useNavigate();
+    const user=JSON.parse(localStorage.getItem('user'));
+    // logout function
+    const logout=()=>{
+        localStorage.clear();
+        navigate('/login');
+    }
     // navList Data
     const navList = (
         <ul className="flex space-x-3 text-white font-medium text-md px-5 ">
@@ -15,9 +22,9 @@ const Navbar = () => {
                 <Link to={'/allproduct'}>All Product</Link>
             </li>
             {/* Signup */}
-            <li>
+            {!user?<li>
                 <Link to={'/signup'}>Signup</Link>
-            </li>
+            </li>:""}
             {/* User */}
             <li>
                 <Link to={'/user-dashboard'}>Upendra</Link>
@@ -27,8 +34,9 @@ const Navbar = () => {
                 <Link to={'/admin-dashboard'}>admin</Link>
             </li> 
             {/* logout */}
-            {/* <li>
-            </li> */}
+            {user&&<li className="cursor-pointer" onClick={logout}>
+                Logout
+            </li>}
             {/* Cart */}
             <li>
                 <Link to={'/cart'}>

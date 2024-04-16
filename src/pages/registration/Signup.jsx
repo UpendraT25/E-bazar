@@ -5,10 +5,10 @@ import { useContext, useState } from "react";
 import toast from 'react-hot-toast'
 import MyContext from "../../context/MyContext";
 import {useNavigate} from "react-router-dom"
+import Loader from "../../components/loader/Loader";
 
 const Signup = () => {
-    // const context=useContext(MyContext);
-    // const {loading,setLoading}=context;
+    const [loading,setLoading]=useState(false);
 
     // navigate
     const navigate=useNavigate();
@@ -24,9 +24,7 @@ const Signup = () => {
             toast.error("All fiield required to be filled")
             return ;
         }
-
-
-        // setLoading(true);
+        setLoading(true);
         const b=authservice.CreateAccount(userSignup);
         if(b){
             setUserSignup({
@@ -35,15 +33,18 @@ const Signup = () => {
                 email:"",
                 password:""
             })
+            setLoading(false);
             toast.success("Signup Successful");
             navigate('/login');
         }
+        setLoading(false);
         // console.log(b);
     }
 
     return (
         <div className='flex justify-center items-center h-screen'>
             {/* Login Form  */}
+            {loading&&<Loader/>}
             <div className="login_Form bg-pink-50 px-1 lg:px-8 py-6 border border-pink-100 rounded-xl shadow-md">
 
                 {/* Top Heading  */}
