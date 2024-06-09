@@ -1,5 +1,6 @@
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import SearchBar from "../searchBar/SearchBar";
+import authservice from "../../appwrite/Auth";
 
 
 const Navbar = () => {
@@ -7,6 +8,7 @@ const Navbar = () => {
     const user=JSON.parse(localStorage.getItem('user'));
     // logout function
     const logout=()=>{
+        authservice.Logout();
         localStorage.clear();
         navigate('/login');
     }
@@ -25,14 +27,18 @@ const Navbar = () => {
             {!user?<li>
                 <Link to={'/signup'}>Signup</Link>
             </li>:""}
+            {/* login */}
+            {!user?<li>
+                <Link to={'/login'}>Login</Link>
+            </li>:''}
             {/* User */}
-            <li>
+            {user?.Role=="user"&&<li>
                 <Link to={'/user-dashboard'}>Upendra</Link>
-            </li>
+            </li>}
             {/* Admin */}
-            <li>
+            {user?.Role=="admin"&&<li>
                 <Link to={'/admin-dashboard'}>admin</Link>
-            </li> 
+            </li>}
             {/* logout */}
             {user&&<li className="cursor-pointer" onClick={logout}>
                 Logout

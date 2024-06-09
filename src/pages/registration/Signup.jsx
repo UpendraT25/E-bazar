@@ -17,7 +17,7 @@ const Signup = () => {
         name: "",
         email: "",
         password: "",
-        role:"user"
+        labels:"user"
     });
     const event=()=>{
         if(userSignup.name==""||userSignup.password==""||userSignup.email==""){
@@ -37,6 +37,12 @@ const Signup = () => {
             toast.success("Signup Successful");
             navigate('/login');
         }
+        setUserSignup({
+            ...Signup,
+            name:"",
+            email:"",
+            password:""
+        })
         setLoading(false);
         // console.log(b);
     }
