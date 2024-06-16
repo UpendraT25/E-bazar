@@ -1,14 +1,30 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import service from "../../appwrite/config";
 import { useContext } from "react";
 import MyContext from "../../context/MyContext";
 import Loader from "../loader/Loader";
 import MyState from "../../context/MyState";
+import toast from "react-hot-toast";
 
 const ProductDetail = () => {
     const context=useContext(MyContext);
-    const{loading,getAllProducts}=context;
-    console.log(getAllProducts);
+    const{loading,setLoading,getAllProducts,getAllProductsFunction}=context;
+    // console.log(getAllProducts);
+
+    const navigate=useNavigate();
+
+    const deleteProduct=async(id)=>{
+        setLoading(true);
+        try{
+            await service.deletedoc(id)
+            toast.success('Product Deleted successfully')
+            getAllProductsFunction();
+            setLoading(false);
+        }catch(error){
+            console.log("not deleted");
+            setLoading(false);
+        }
+    }
     return (
         <div>
             <div className="py-5 flex justify-between items-center">
@@ -40,7 +56,7 @@ const ProductDetail = () => {
                             <th scope="col" className="h-12 px-6 text-md font-bold fontPara border-l first:border-l-0 border-pink-100 text-slate-700 bg-slate-100">Action</th>
                         </tr>
                         {getAllProducts.map((item,index)=>{
-                            const { id, title, price, category, date, productImageUrl } = item
+                            const { $id, title, price, category, date, productImageUrl } = item
                             return (
                                 <tr key={index} className="text-pink-300">
                             <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 ">
@@ -63,10 +79,11 @@ const ProductDetail = () => {
                             <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 first-letter:uppercase ">
                                 {date}
                             </td>
-                            <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 text-green-500 cursor-pointer ">
+                            <td
+                            onClick={()=>navigate(`/updateproduct/${$id}`)} className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 text-green-500 cursor-pointer ">
                                 Edit
                             </td>
-                            <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 text-red-500 cursor-pointer ">
+                            <td onClick={()=>deleteProduct($id)} className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 text-red-500 cursor-pointer ">
                                 Delete
                             </td>
                         </tr>

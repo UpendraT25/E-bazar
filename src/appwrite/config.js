@@ -38,10 +38,56 @@ export class Service{
                 return await this.databases.listDocuments(
                     conf.appwriteDBid,
                     conf.appwritecollectionid,
-                    []
+                    [],
                 )
             }catch(error){
                 console.log("not able to fetch data");
+            }
+        }
+
+        async singledatafetch(id){
+            try{
+                return await this.databases.listDocuments(
+                    conf.appwriteDBid,
+                    conf.appwritecollectionid,
+                    [Query.equal(`$id`,id)],
+                )
+                // console.log(a);
+            }catch(error){
+                console.log("not able to fetch data");
+            }
+        }
+        async Updatedoc(id,{title,price,productImageUrl,category,description,quantity,time,date}){
+            try{
+                return await this.databases.updateDocument(
+                    conf.appwriteDBid,
+                    conf.appwritecollectionid,
+                    id,
+                    {
+                        title,
+                        price,
+                        productImageUrl,
+                        category,
+                        description,
+                        quantity,
+                        time,
+                        date,   
+                    }
+                )
+            }catch(error){
+                console.log("not able to update data");
+            }
+        }
+
+        async deletedoc(id){
+            try{
+                return await this.databases.deleteDocument(
+                    conf.appwriteDBid,
+                    conf.appwritecollectionid,
+                    id
+                );
+            }catch(error){
+                console.log("not deletable");
             }
         }
 }

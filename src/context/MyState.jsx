@@ -8,7 +8,7 @@ function MyState({children}){
     const getAllProductsFunction=async()=>{
         setLoading(true);
         try{
-            const a=await service.productdetails();
+            const a=await service.productdetails([]);
             console.log(a.documents);
             setGetAllproducts(a.documents);
             setLoading(false);
@@ -23,7 +23,8 @@ function MyState({children}){
     return (
         <MyContext.Provider value={{loading,
             setLoading,
-            getAllProducts
+            getAllProducts,
+            getAllProductsFunction
         }}>
             {children}
         </MyContext.Provider>
