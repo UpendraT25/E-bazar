@@ -9,7 +9,7 @@ function MyState({children}){
         setLoading(true);
         try{
             const a=await service.productdetails([]);
-            console.log(a.documents);
+            // console.log(a.documents);
             setGetAllproducts(a.documents);
             setLoading(false);
         }catch(error){

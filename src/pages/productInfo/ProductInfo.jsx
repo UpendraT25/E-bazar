@@ -4,6 +4,9 @@ import MyContext from "../../context/MyContext";
 import { useParams } from "react-router-dom";
 import service from "../../appwrite/config";
 import Loader from "../../components/loader/Loader";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, deleteFromCart } from "../../redux/CartSlice";
+import toast from 'react-hot-toast'
 
 const ProductInfo = () => {
 
@@ -28,13 +31,27 @@ const ProductInfo = () => {
         }
     }
 
+    const cartItems=useSelector((state)=>state.cart);
+    const dispatch=useDispatch();
+
+    const addCart = (item) => {
+        // console.log(item)
+        dispatch(addToCart(item));
+        toast.success("Add to cart")
+    }
+
+    const deleteCart = (item) => {
+        dispatch(deleteFromCart(item));
+        toast.success("Delete cart")
+    }
+
     useEffect(()=>{
         getProductData()
     },[])
     return (
         <Layout>
             <section className="py-5 lg:py-16 font-poppins dark:bg-gray-800">
-            {loading ?
+                {loading ?
                     <>
                         <div className="flex justify-center items-center">
                             <Loader />
@@ -44,7 +61,7 @@ const ProductInfo = () => {
                     :
 
                     <>
-                <div className="max-w-6xl px-4 mx-auto">
+                        <div className="max-w-6xl px-4 mx-auto">
                             <div className="flex flex-wrap mb-24 -mx-4">
                                 <div className="w-full px-4 mb-8 md:w-1/2 md:mb-0">
                                     <div className="">
@@ -129,24 +146,42 @@ const ProductInfo = () => {
                                         </div>
                                         <div className="mb-6">
                                             <h2 className="mb-2 text-lg font-bold text-gray-700 dark:text-gray-400">
+                                            Description :
                                             </h2>
                                             <p>{product?.description}</p>
                                         </div>
                                         <div className="mb-6 " />
                                         <div className="flex flex-wrap items-center mb-6">
+                                            {cartItems.some((p) => p.$id === product.$id)
+                                                ?
+                                                <button
+                                                    onClick={() => deleteCart(product)}
+                                                    className="w-full px-4 py-3 text-center text-white bg-red-500 border border--600  hover:bg-red-600 hover:text-gray-100  rounded-xl"
+                                                >
+                                                    Delete to cart
+                                                </button>
+                                                :
+                                                <button
+                                                    onClick={() => addCart(product)}
+                                                    className="w-full px-4 py-3 text-center text-pink-600 bg-pink-100 border border-pink-600  hover:bg-pink-600 hover:text-gray-100  rounded-xl"
+                                                >
+                                                    Add to cart
+                                                </button>
+                                            }
+                                        </div>
+                                        <div className="flex gap-4 mb-6">
                                             <button
-                                                className="w-full px-4 py-3 text-center text-pink-600 bg-pink-100 border border-pink-600  hover:bg-pink-600 hover:text-gray-100  rounded-xl"
+                                                className="w-full px-4 py-3 text-center text-gray-100 bg-pink-600 border border-transparent dark:border-gray-700 hover:border-pink-500 hover:text-pink-700 hover:bg-pink-100 rounded-xl"
                                             >
-                                                Add to Cart
+                                                Buy now
                                             </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                </>}
+                    </>}
             </section>
-
         </Layout>
     );
 }

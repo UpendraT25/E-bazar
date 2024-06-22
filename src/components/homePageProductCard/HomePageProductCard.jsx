@@ -1,12 +1,33 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import MyContext from "../../context/MyContext";
+import {useDispatch,useSelector} from 'react-redux'
+import { addToCart, deleteFromCart } from "../../redux/CartSlice";
+import toast from "react-hot-toast";
 
 const HomePageProductCard=()=>{
     const navigate=useNavigate();
 
     const context=useContext(MyContext);
     const {getAllProducts}=context;
+ 
+    const cartItems=useSelector((state)=>state.cart);
+    // console.log(cartItems);
+    const dispatch=useDispatch();
+
+    const addCart=(item)=>{
+        dispatch(addToCart(item));
+        toast.success("Add to cart");
+    }
+
+    const deleteCart=(item)=>{
+        dispatch(deleteFromCart(item));
+        toast.success("Delete cart")
+    }
+
+    useEffect(()=>{
+        localStorage.setItem('cart',JSON.stringify(cartItems))
+    },[cartItems])
     return(
         <div className="mt-10">
             {/* Heading  */}
@@ -18,7 +39,7 @@ const HomePageProductCard=()=>{
                 <div className="container px-5 py-5 mx-auto">
                     <div className="flex flex-wrap -m-4">
                         {getAllProducts.slice(0,8).map((item, index) => {
-                            const { $id, title, price,productImageUrl } = item
+                            const { $id, title, price,productImageUrl ,quantity} = item
                             return (
                                 <div key={index} className="p-4 w-full md:w-1/4">
                                     <div className="h-full border border-gray-300 rounded-xl overflow-hidden shadow-md cursor-pointer">
@@ -38,9 +59,23 @@ const HomePageProductCard=()=>{
                                                 ₹{price}
                                             </h1>
                                             <div className="flex justify-center ">
-                                                <button className=" bg-pink-500 hover:bg-pink-600 w-full text-white py-[4px] rounded-lg font-bold">
-                                                Add To Cart
+                                            {cartItems.some((p)=> p.$id === item.$id) 
+                                                
+                                                ?
+                                                <button
+                                                    onClick={() => deleteCart(item)}
+                                                    className=" bg-red-700 hover:bg-pink-600 w-full text-white py-[4px] rounded-lg font-bold">
+                                                        Delete To Cart
                                                 </button>
+
+                                                : 
+
+                                                <button
+                                                    onClick={() => addCart(item)}
+                                                    className=" bg-pink-500 hover:bg-pink-600 w-full text-white py-[4px] rounded-lg font-bold">
+                                                        Add To Cart
+                                                </button>
+                                            }
                                             </div>
                                         </div>
                                     </div>
