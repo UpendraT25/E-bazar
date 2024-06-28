@@ -90,7 +90,72 @@ export class Service{
                 console.log("not deletable");
             }
         }
-}
+
+        // ---------------------------------------------------------------------------
+        // ODER PLACING SECTION
+        // ---------------------------------------------------------------------------
+
+        async PlaceOrder({addInfo,email,status,time,date,ctItems}){
+            try{
+                return await this.databases.createDocument(
+                    conf.appwriteDBid,
+                    conf.appwritecollectionidorder,
+                    ID.unique(),
+                    {addInfo,
+                        email,
+                        status,
+                        time,
+                        date,
+                        ctItems
+                    }
+                )
+            }catch(error){
+                console.log("error in adding docs");
+            }
+        }
+
+        async orderProducts(email){
+            try{
+                return await this.databases.listDocuments(
+                    conf.appwriteDBid,
+                    conf.appwritecollectionidorder,
+                    [Query.equal(`email`,email)],
+                )
+                // console.log(a);
+            }catch(error){
+                console.log("not able to fetch data");
+            }
+        }
+
+        async deleteOrder($id){
+            try{
+                return await this.databases.deleteDocument(
+                    conf.appwriteDBid,
+                    conf.appwritecollectionidorder,
+                    $id
+                );
+            }catch(error){
+                console.log("not deletable");
+            }
+        }
+        
+        // ----------------------------------------------------------------------------------------
+        //                    GET ALL USER FUNCTION
+        // ---------------------------------------------------------------------------------------
+        async getUser(labels){
+            try{
+                return await this.databases.listDocuments(
+                    conf.appwriteDBid,
+                    conf.appwritecollectionid,
+                    [Query.equal(`labels`,labels)],
+                )
+                // console.log(a);
+            }catch(error){
+                console.log("not able to fetch data");
+            }
+        }
+    }
+
 
 const service=new Service();
 export default service

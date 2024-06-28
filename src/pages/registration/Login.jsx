@@ -24,7 +24,7 @@ const Login = () => {
 
         if(data){
             const data2=await authservice.getCurrentUser();
-            console.log(data2);
+            // console.log(data2);
             await localStorage.setItem('user',JSON.stringify({"name":data2.name,"email":data2.email,"Role":data2.labels[0]}));
             setLoading(false);
             toast.success("Login succesfully")

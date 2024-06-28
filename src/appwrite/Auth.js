@@ -29,7 +29,7 @@ export class AuthService{
         try{
         const userlogin=await this.account.createEmailSession(email,password);
         if(userlogin){
-            console.log(userlogin);
+            // console.log(userlogin);
             return userlogin;
         }else {
             return userlogin;
@@ -54,8 +54,6 @@ export class AuthService{
         }
         return null;
     }
-
-    
 }
 
 const authservice=new AuthService();
