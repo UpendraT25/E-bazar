@@ -36,7 +36,7 @@ const Navbar = () => {
             </li>:''}
             {/* User */}
             {user?.Role=="user"&&<li>
-                <Link to={'/user-dashboard'}>Upendra</Link>
+                <Link to={'/user-dashboard'}>User</Link>
             </li>}
             {/* Admin */}
             {user?.Role=="admin"&&<li>
